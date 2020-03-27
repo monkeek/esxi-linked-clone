@@ -61,16 +61,9 @@ main() {
 
   # Forces creation of a fresh UUID for the VM.  Obviates the need for the line
   # commented out below:
-  #echo 'answer.msg.uuid.altered="I copied it" ' >>./*.vmx
   sed -i '/uuid.location/d' ./*.vmx
   sed -i '/uuid.bios/d' ./*.vmx
-
-  # Things that ghetto-esxi-linked-clones.sh did that we might want.  I can only guess at their use/value.
-  #sed -i '/scsi0:0.fileName/d' ${STORAGE_PATH}/$FINAL_VM_NAME/$FINAL_VM_NAME.vmx
-  #echo "scsi0:0.fileName = \"${STORAGE_PATH}/${GOLDEN_VM_NAME}/${VMDK_PATH}\"" >> ${STORAGE_PATH}/$FINAL_VM_NAME/$FINAL_VM_NAME.vmx
-  #sed -i 's/nvram = "'${GOLDEN_VM_NAME}.nvram'"/nvram = "'${FINAL_VM_NAME}.nvram'"/' ${STORAGE_PATH}/$FINAL_VM_NAME/$FINAL_VM_NAME.vmx
-  #sed -i 's/extendedConfigFile = "'${GOLDEN_VM_NAME}.vmxf'"/extendedConfigFile = "'${FINAL_VM_NAME}.vmxf'"/' ${STORAGE_PATH}/$FINAL_VM_NAME/$FINAL_VM_NAME.vmx
-
+  
   # delete machine id
   sed -i '/machine.id/d' *.vmx
 
@@ -80,9 +73,6 @@ main() {
   # Register the machine so that it appears in vSphere.
   FULL_PATH=`pwd`/*.vmx
   VMID=`vim-cmd solo/registervm $FULL_PATH`
-
-  # Power on the machine.
-  vim-cmd vmsvc/power.on $VMID
 }
 
 main
